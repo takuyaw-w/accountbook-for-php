@@ -1,3 +1,28 @@
+<?php
+
+require_once './constant.php';
+require_once './dbhelper.php';
+
+// DB接続
+$conn = new PDO(DSN, DB_USER, DB_PASS, PDO_CONFIG);
+
+// テーブルを作成
+createTable($conn);
+
+// リクエストがPOST=項目、金額入力されたとみて、テーブルにデータ追加
+if ($_SERVER['REQUEST_METHOD'] === POST) {
+  $category = $_POST['category'];
+  $price = intval($_POST['price']);
+  addItem($conn, $category, $price);
+}
+
+// アイテムを10件取得
+$items = getItems($conn, 10);
+
+// 接続終了
+$conn = null;
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -24,13 +49,13 @@
           <div class="field">
             <label class="label">項目</label>
             <div class="control">
-              <input class="input" type="text" placeholder="category" />
+              <input class="input" type="text" name="category" placeholder="category" required />
             </div>
           </div>
           <div class="field">
             <label class="label">金額</label>
             <div class="control">
-              <input class="input" type="number" placeholder="0" />
+              <input class="input" type="number" name="price" placeholder="0"  required />
             </div>
           </div>
           <div class="field">
@@ -44,71 +69,32 @@
       <section class="section">
         <div class="is-flex">
           <h1 class="title mr-3">最新の10件</h1>
-          <a class="button is-primary is-light" href="./summary.php"
-            >集計を行う</a
-          >
+          <a class="button is-primary is-light" href="./summary.php">
+            集計を行う
+          </a>
         </div>
-        <table class="table is-striped is-fullwidth">
-          <thead>
-            <tr>
-              <th style="width: 20px">#</th>
-              <th>項目</th>
-              <th>金額</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>9</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>10</td>
-              <td>テスト</td>
-              <td>1000</td>
-            </tr>
-          </tbody>
-        </table>
+        <?php if(empty($items)) : ?>
+          <p>参照できるアイテムが存在しません。
+        <?php else : ?>
+          <table class="table is-striped is-fullwidth">
+            <thead>
+              <tr>
+                <th style="width: 20px">#</th>
+                <th>項目</th>
+                <th>金額</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($items as $key => $val) : ?>
+                <tr>
+                  <td><?php echo $val['id'] ?></td>
+                  <td><?php echo $val['category']; ?></td>
+                  <td><?php echo $val['price']; ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        <?php endif; ?>
       </section>
     </div>
     <footer class="footer">
