@@ -1,26 +1,23 @@
 <?php
 
-require_once './constant.php';
 require_once './dbhelper.php';
+require_once './codehelper.php';
 
-// DB接続
-$conn = new PDO(DSN, DB_USER, DB_PASS, PDO_CONFIG);
-
+$conn = getDb();
 // テーブルを作成
 createTable($conn);
 
 // リクエストがPOST=項目、金額入力されたとみて、テーブルにデータ追加
-if ($_SERVER['REQUEST_METHOD'] === POST) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $category = $_POST['category'];
   $price = intval($_POST['price']);
   addItem($conn, $category, $price);
+  header("Location: http://{$_SERVER['HTTP_HOST']}");
+  exit();
 }
 
 // アイテムを10件取得
 $items = getItems($conn, 10);
-
-// 接続終了
-$conn = null;
 ?>
 
 <!DOCTYPE html>
@@ -87,9 +84,9 @@ $conn = null;
             <tbody>
               <?php foreach($items as $key => $val) : ?>
                 <tr>
-                  <td><?php echo $val['id'] ?></td>
-                  <td><?php echo $val['category']; ?></td>
-                  <td><?php echo $val['price']; ?></td>
+                  <td><?php echo h($val['id']) ?></td>
+                  <td><?php echo h($val['category']); ?></td>
+                  <td><?php echo h($val['price']); ?></td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
