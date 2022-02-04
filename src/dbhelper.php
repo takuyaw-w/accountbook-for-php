@@ -13,12 +13,12 @@ function getDb(): PDO {
 
 function createTable(\PDO &$pdo): void {
     $sql = <<<EOM
-    CREATE TABLE IF NOT EXISTS items(
-		id        INTEGER AUTO_INCREMENT PRIMARY KEY,
-		category  TEXT NOT NULL,
-		price     INTEGER NOT NULL
-	);
-EOM;
+        CREATE TABLE IF NOT EXISTS items(
+            id        INTEGER AUTO_INCREMENT PRIMARY KEY,
+            category  TEXT NOT NULL,
+            price     INTEGER NOT NULL
+        );
+    EOM;
     $pdo->query($sql);
 }
 
@@ -37,4 +37,29 @@ function addItem(\PDO &$pdo, string $category, int $price ): void {
     $stmt->bindParam(':category', $category, PDO::PARAM_STR);
     $stmt->bindParam(':price', $price, PDO::PARAM_INT);
     $stmt->execute();
+}
+
+function getSummaries(\PDO &$pdo): array {
+    $sql = <<<EOM
+        SELECT
+            category
+            ,COUNT(1) as count
+            ,SUM(price) as sum
+        FROM
+            items
+        GROUP BY
+            category
+        ;
+    EOM;
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $data = $stmt->fetchAll();
+    return $data;
+}
+
+function avg(array $data): float {
+    if ($data['count'] === 0) {
+        return 0;
+    }
+    return $data['sum'] / $data['count'];
 }

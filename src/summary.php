@@ -1,5 +1,10 @@
 <?php
-    $aaaa = json_encode([100,200,300,400]);
+    require_once './codehelper.php';
+    require_once './dbhelper.php';
+
+    $conn = getDb();
+    $summries = getSummaries($conn);
+    $js_summries = json_encode($summries);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -23,7 +28,29 @@
     <div class="container">
       <section class="section">
         <h1 class="title">集計</h1>
-        <div id="piechart" style="width: 100%; height: 600px;"></div>
+        <div id="piechart" style="border: 1px solid #000;width: 100%; height: 400px;"></div>
+        <?php if(empty($summries)) : ?>
+          <p>参照できるアイテムが存在しません。
+        <?php else : ?>
+          <table class="table is-striped is-fullwidth">
+            <thead>
+              <tr>
+                <th>項目</th>
+                <th>合計</th>
+                <th>平均</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($summries as $key => $val) : ?>
+                <tr>
+                  <td><?php echo h($val['category']); ?></td>
+                  <td><?php echo h($val['sum']); ?></td>
+                  <td><?php echo h(avg($val)); ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        <?php endif; ?>
       </section>
     </div>
     <footer class="footer">
@@ -36,15 +63,14 @@
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
+            const summries = <?php echo $js_summries; ?>;
+            const d = summries.map((val) => {
+              return [val.category, Math.trunc(val.sum)]
+            })
             const data = google.visualization.arrayToDataTable([
                 ['品目', '値段'],
-                ['a', 2130],
-                ['b', 45321],
-                ['c', 5647],
+                ...d
             ]);
-
-            const a = <?php echo $aaaa; ?>;
-            console.log(a);
 
             const options = { title: '割合' };
             const chart = new google.visualization.PieChart(document.getElementById('piechart'));
