@@ -1,5 +1,5 @@
 <?php
 
 function h($str): string {
-    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
