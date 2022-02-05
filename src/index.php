@@ -6,16 +6,6 @@ require_once './codehelper.php';
 $conn = getDb();
 // テーブルを作成
 createTable($conn);
-
-// リクエストがPOST=項目、金額入力されたとみて、テーブルにデータ追加
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $category = $_POST['category'];
-  $price = intval($_POST['price']);
-  addItem($conn, $category, $price);
-  header("Location: http://{$_SERVER['HTTP_HOST']}");
-  exit();
-}
-
 // アイテムを10件取得
 $items = getItems($conn, 10);
 ?>
@@ -42,7 +32,7 @@ $items = getItems($conn, 10);
     <div class="container">
       <section class="section">
         <h1 class="title">項目/金額入力</h1>
-        <form action="./index.php" method="post">
+        <form action="./register.php" method="post">
           <div class="field">
             <label class="label">項目</label>
             <div class="control">
