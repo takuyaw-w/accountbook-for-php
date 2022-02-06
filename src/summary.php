@@ -27,7 +27,12 @@
     </section>
     <div class="container">
       <section class="section">
-        <h1 class="title">集計</h1>
+        <div class="is-flex">
+          <h1 class="title mr-3">集計</h1>
+          <a class="button is-primary is-light" href="./index.php">
+            戻る
+          </a>
+        </div>
         <div id="piechart" style="border: 1px solid #000;width: 100%; height: 400px;"></div>
         <?php if(empty($summries)) : ?>
           <p>参照できるアイテムが存在しません。
