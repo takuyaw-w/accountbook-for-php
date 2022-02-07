@@ -16,14 +16,15 @@ function createTable(\PDO &$pdo): void {
         CREATE TABLE IF NOT EXISTS items(
             id        INTEGER AUTO_INCREMENT PRIMARY KEY,
             category  TEXT NOT NULL,
-            price     INTEGER NOT NULL
+            price     INTEGER NOT NULL,
+            note      TEXT
         );
     EOM;
     $pdo->query($sql);
 }
 
 function getItems(\PDO &$pdo, int $limit): array {
-    $sql = "SELECT * FROM items ORDER BY id DESC LIMIT :limit";
+    $sql = "SELECT id, category, price FROM items ORDER BY id DESC LIMIT :limit";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':limit', $limit);
     $stmt->execute();
@@ -31,11 +32,31 @@ function getItems(\PDO &$pdo, int $limit): array {
     return $data;
 }
 
-function addItem(\PDO &$pdo, string $category, int $price ): void {
-    $sql = "INSERT INTO items(category, price) VALUES (:category, :price)";
+function getItem(\PDO &$pdo, int $id): array {
+    $sql = "SELECT * FROM items WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $data = $stmt->fetch();
+    return $data;
+}
+
+function addItem(\PDO &$pdo, string $category, int $price, string $note = ''): void {
+    $sql = "INSERT INTO items(category, price, note) VALUES (:category, :price, :note)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':category', $category, PDO::PARAM_STR);
     $stmt->bindParam(':price', $price, PDO::PARAM_INT);
+    $stmt->bindParam(':note', $note, PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+function updateItem(\PDO &$pdo, int $id, string $category, int $price, string $note = ''): void {
+    $sql = "UPDATE items SET category = :category, price = :price, note = :note WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+    $stmt->bindParam(':price', $price, PDO::PARAM_INT);
+    $stmt->bindParam(':note', $note, PDO::PARAM_STR);
     $stmt->execute();
 }
 

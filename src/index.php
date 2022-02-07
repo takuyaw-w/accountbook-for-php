@@ -42,7 +42,13 @@ $items = getItems($conn, 10);
           <div class="field">
             <label class="label">金額</label>
             <div class="control">
-              <input class="input" type="number" name="price" placeholder="0"  required />
+              <input class="input" type="number" name="price" placeholder="0" required />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">メモ</label>
+            <div class="control">
+              <input class="input" type="text" name="note" placeholder="memo" />
             </div>
           </div>
           <div class="field">
@@ -75,7 +81,7 @@ $items = getItems($conn, 10);
               <?php foreach($items as $key => $val) : ?>
                 <tr>
                   <td><?php echo h($val['id']) ?></td>
-                  <td><?php echo h($val['category']); ?></td>
+                  <td><a href="./detail.php?id=<?php echo h($val['id']); ?>"><?php echo h($val['category']); ?></a></td>
                   <td><?php echo h($val['price']); ?></td>
                 </tr>
               <?php endforeach; ?>

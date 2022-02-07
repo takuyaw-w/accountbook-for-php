@@ -9,9 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 $conn = getDb();
 
+$id = intval($_POST['id']);
 $category = $_POST['category'];
 $price = intval($_POST['price']);
 $note = $_POST['note'];
-addItem($conn, $category, $price, $note);
+updateItem($conn, $id, $category, $price, $note);
 header("Location: ./");
 exit();
