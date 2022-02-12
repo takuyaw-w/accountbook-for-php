@@ -34,39 +34,39 @@ $item = getItem($conn, $id);
     <div class="container">
       <section class="section">
         <div class="is-flex">
-          <h1 class="title mr-3">詳細データ</h1>
+          <h1 class="title mr-3">以下のデータを削除しますか？</h1>
           <a class="button is-primary is-light" href="./index.php">
             戻る
           </a>
         </div>
-        <form action="./update.php" method="post">
+        <form action="./delete.php" method="post">
           <div class="field">
             <label class="label">識別番号</label>
             <div class="control">
-              <input class="input" type="number" name="id" placeholder="category" value="<?php echo $item['id']; ?>" readonly required />
+              <input class="input" type="number" name="id" placeholder="category" value="<?php echo $item['id']; ?>" readonly />
             </div>
           </div>
           <div class="field">
             <label class="label">項目</label>
             <div class="control">
-              <input class="input" type="text" name="category" placeholder="category" value="<?php echo $item['category']; ?>" required />
+              <input class="input" type="text" name="category" placeholder="category" value="<?php echo $item['category']; ?>" readonly />
             </div>
           </div>
           <div class="field">
             <label class="label">金額</label>
             <div class="control">
-              <input class="input" type="number" name="price" placeholder="0" value="<?php echo $item['price']; ?>" required />
+              <input class="input" type="number" name="price" placeholder="0" value="<?php echo $item['price']; ?>" readonly />
             </div>
           </div>
           <div class="field">
             <label class="label">メモ</label>
             <div class="control">
-              <input class="input" type="text" name="note" placeholder="memo" value="<?php echo $item['note']; ?>" />
+              <input class="input" type="text" name="note" placeholder="memo" value="<?php echo $item['note']; ?>" readonly />
             </div>
           </div>
           <div class="field">
             <p class="control">
-              <button type="submit" class="button is-success">Update</button>
+              <button type="submit" class="button is-danger">Delete</button>
             </p>
           </div>
         </form>

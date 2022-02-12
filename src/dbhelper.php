@@ -60,6 +60,13 @@ function updateItem(\PDO &$pdo, int $id, string $category, int $price, string $n
     $stmt->execute();
 }
 
+function deleteItem(\PDO &$pdo, int $id): void {
+    $sql = "DELETE FROM items WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
 function getSummaries(\PDO &$pdo): array {
     $sql = <<<EOM
         SELECT

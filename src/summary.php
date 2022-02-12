@@ -4,7 +4,6 @@
 
     $conn = getDb();
     $summries = getSummaries($conn);
-    $js_summries = json_encode($summries);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -68,7 +67,7 @@
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
-            const summries = <?php echo $js_summries; ?>;
+            const summries = <?php echo json_encode($summries); ?>;
             const d = summries.map((val) => {
               return [val.category, Math.trunc(val.sum)]
             })

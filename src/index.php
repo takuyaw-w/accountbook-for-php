@@ -74,7 +74,8 @@ $items = getItems($conn, 10);
               <tr>
                 <th style="width: 20px">#</th>
                 <th>項目</th>
-                <th>金額</th>
+                <th colspan="2">金額</th>
+                <th style="width: 120px"></th>
               </tr>
             </thead>
             <tbody>
@@ -82,7 +83,8 @@ $items = getItems($conn, 10);
                 <tr>
                   <td><?php echo h($val['id']) ?></td>
                   <td><a href="./detail.php?id=<?php echo h($val['id']); ?>"><?php echo h($val['category']); ?></a></td>
-                  <td><?php echo h($val['price']); ?></td>
+                  <td colspan="2"><?php echo h($val['price']); ?></td>
+                  <td class="has-text-centered"><a class="button is-danger" href="./deletion.php?id=<?php echo h($val['id']);?>">削除</td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
